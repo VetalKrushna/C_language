@@ -1,4 +1,4 @@
-/*//Write a'C' program to accept n integers in an array and display the
+//Write a'C' program to accept n integers in an array and display the
 //array in reverse order.
 #include<stdio.h>
 int main()
@@ -17,23 +17,3 @@ int main()
         printf("%d",a[i]);
     }
 }
-*/
-#include<stdio.h>
-int main()
-{
-    int isprime(int n);
-    int n;
-    isprime(n);
-}
- int isprime(int n)
- {
-    int i,f=1;
-    for(i=100;i<=500;i++)
-    {
-        if(n%i==0)
-        { f=0; }
-   
-    if(f==1)
-    printf("prime");
-    else printf("not prime");
- }}
