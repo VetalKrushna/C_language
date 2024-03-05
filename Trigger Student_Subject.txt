@@ -1,0 +1,93 @@
+
+create table student(rno int primary key,name varchar(20),city varchar(20),class varchar(10));
+
+insert into student values(101,'om','pune','fybcs');
+insert into student values(102,'sai','shirdi','sybcs');
+insert into student values(103,'ram','shrirampur','tybcs');
+insert into student values(104,'sham','mumbai','mcs');
+insert into student values(105,'sunder','nager','fybcs');
+
+create table subject(scode varchar(10)primary key,subname varchar(20));
+
+insert into subject values('01AA','mathematics');
+insert into subject values('02BB','datastructure');
+insert into subject values('03CC','rdbms');
+insert into subject values('04DD','statestic');
+insert into subject values('05EE','english');
+
+create table stud_sub(rno int references student,scode varchar(10) references subject,marks_scored int);
+ 
+insert into stud_sub values(105,'01AA',45);
+insert into stud_sub values(104,'02BB',20);
+insert into stud_sub values(103,'03CC',60);
+insert into stud_sub values(102,'04DD',70);
+insert into stud_sub values(101,'05EE',90);
+
+
+a. Write a trigger before insert/update the marks_scored.Raise exception if Marks 
+are negative
+=
+
+ create or replace function insertmark() returns trigger
+ as
+$$
+declare
+begin 
+  if(new.marks_scored<0) then
+    RAISE EXCEPTION 'marks should be positive';
+  end if;
+return new;
+end; 
+$$
+language plpgsql;
+
+create trigger marks3
+before insert or update on stud_sub
+for each row execute procedure insertmark();
+
+ insert into stud_sub(marks_scored) values(-1);
+ERROR:  marks should be positive
+
+b. Write a trigger which is executed when insertion is made in the studentsubject table.If marks_scored is less than 0, give appropriate message and 
+do not allow the insertion. 
+==
+ create or replace function insertmark() returns trigger
+ as
+$$
+declare
+begin 
+  if(new.marks_scored<0) then
+    RAISE EXCEPTION 'marks should be positive';
+  end if;
+return new;
+end; 
+$$
+language plpgsql;
+
+create trigger marks4
+before insert or update on stud_sub
+for each row execute procedure insertmark();
+
+ insert into stud_sub(marks_scored) values(-1);
+ERROR:  marks should be positive
+
+c. Write a trigger which will prevent deleting students from ‘Pune’ city
+==
+
+create or replace function fun1() returns trigger 
+as
+$$
+BEGIN
+   if rno=102 then
+    raise exception'You cant delete';
+    end if; 
+    return new;
+END; 
+$$
+language plpgsql;
+
+
+create trigger tt2
+before delete on student
+for each row
+execute procedure fun1();
